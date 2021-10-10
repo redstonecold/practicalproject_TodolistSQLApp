@@ -14,6 +14,8 @@ public class Menu {
         System.out.println("ls_cate - 카테고리 목록 보기");
         System.out.println("find <키워드> - 제목 또는 내용이 해당 키워드를 포함하고 있는 일정 검색");
         System.out.println("find_cate <키워드> - 카테고리가 해당 키워드를 포함하고 있는 일정 검색");
+        System.out.println("comp <id> - id번의 일정을 완료 표시");
+        System.out.println("ls_comp - 완료한 일정 검색");
         System.out.println("exit - 종료");
     }
     

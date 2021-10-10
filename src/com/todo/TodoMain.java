@@ -88,7 +88,6 @@ public class TodoMain {
 					TodoUtil.listAll(l,1);
 					break;
 					
-
 				case "exit":
 					quit = true;
 					break;
