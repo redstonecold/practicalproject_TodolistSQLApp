@@ -108,6 +108,21 @@ public class TodoList {
 		}
 		return count;
 	}
+	
+	public int completeItem(int id) {
+		String sql = "update list set is_completed = 1 where id = ?;";
+		PreparedStatement pstmt;
+		int count = 0;
+		try {
+			pstmt = conn.prepareStatement(sql);
+			pstmt.setInt(1, id);
+			count = pstmt.executeUpdate(); //해당 statement에 영향을 받은 record의 수가 return됨 
+			pstmt.close();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return count;
+	}
 
 	public ArrayList<TodoItem> getList() {
 		ArrayList<TodoItem> list = new ArrayList<TodoItem>();
@@ -123,7 +138,8 @@ public class TodoList {
 				String description = rs.getString("memo");
 				String due_date = rs.getString("due_date");
 				String current_date = rs.getString("current_date");
-				TodoItem t = new TodoItem(title, description, current_date, category, due_date);
+				int is_completed = rs.getInt("is_completed");
+				TodoItem t = new TodoItem(title, description, current_date, category, due_date, is_completed);
 				t.setId(id);
 				list.add(t);
 			}
@@ -151,7 +167,35 @@ public class TodoList {
 				String description = rSet.getString("memo");
 				String due_date = rSet.getString("due_date");
 				String current_date = rSet.getString("current_date");
-				TodoItem t = new TodoItem(title, description, current_date, category, due_date);
+				int is_completed = rSet.getInt("is_completed");
+				TodoItem t = new TodoItem(title, description, current_date, category, due_date, is_completed);
+				t.setId(id);
+				list.add(t);
+			}
+			pstmt.close();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return list;
+	}
+	
+	public ArrayList<TodoItem> getList(int select_id) {
+		ArrayList<TodoItem> list = new ArrayList<TodoItem>();
+		PreparedStatement pstmt;
+		try {
+			String sql = "select * from list where is_completed like ?;";
+			pstmt = conn.prepareStatement(sql);
+			pstmt.setInt(1, select_id);
+			ResultSet rSet = pstmt.executeQuery();
+			while (rSet.next()) {
+				int id = rSet.getInt("id");
+				String category = rSet.getString("category");
+				String title = rSet.getString("title");
+				String description = rSet.getString("memo");
+				String due_date = rSet.getString("due_date");
+				String current_date = rSet.getString("current_date");
+				int is_completed = rSet.getInt("is_completed");
+				TodoItem t = new TodoItem(title, description, current_date, category, due_date, is_completed);
 				t.setId(id);
 				list.add(t);
 			}
@@ -210,7 +254,8 @@ public class TodoList {
 				String description = rSet.getString("memo");
 				String due_date = rSet.getString("due_date");
 				String current_date = rSet.getString("current_date");
-				TodoItem t = new TodoItem(title, description, current_date, category, due_date);
+				int is_completed = rSet.getInt("is_completed");
+				TodoItem t = new TodoItem(title, description, current_date, category, due_date, is_completed);
 				t.setId(id);
 				list.add(t);
 			}
@@ -237,7 +282,8 @@ public class TodoList {
 				String description = rSet.getString("memo");
 				String due_date = rSet.getString("due_date");
 				String current_date = rSet.getString("current_date");
-				TodoItem t = new TodoItem(title, description, current_date, category, due_date);
+				int is_completed = rSet.getInt("is_completed");
+				TodoItem t = new TodoItem(title, description, current_date, category, due_date, is_completed);
 				t.setId(id);
 				list.add(t);
 			}

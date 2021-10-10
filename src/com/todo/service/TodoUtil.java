@@ -108,13 +108,20 @@ public class TodoUtil {
 			e.printStackTrace();
 		}
 	}
+	
+	public static void completeItem(TodoList l, int id) {
+		if(l.completeItem(id) > 0) {
+			System.out.println("완료 체크하였습니다. :)");
+		}
+		else System.out.println("올바른 아이디가 아닙니다.");
+	}
 
 	public static void listAll(TodoList l) {
 		int count = 0;
 		System.out.println("------전체 목록------");
 		System.out.println("[총 "+l.getCount()+"개의 일정]");
 		for (TodoItem item : l.getList()) {
-			System.out.println("[" + item.getCategory() + "] " + item.getId() + ". <"+ item.getTitle() + "> " + item.getDesc() + " (마감 : " + item.getDue_date() + ") - " + item.getCurrent_date());
+			System.out.println(item.toString());
 		}
 	}
 	
@@ -122,65 +129,23 @@ public class TodoUtil {
 		System.out.println("------전체 목록------");
 		System.out.println("[총 "+l.getCount()+"개의 일정]");
 		for (TodoItem item : l.getOrderedList(orderby, ordering)) {
-			System.out.println("[" + item.getCategory() + "] " + item.getId() + ". <"+ item.getTitle() + "> " + item.getDesc() + " (마감 : " + item.getDue_date() + ") - " + item.getCurrent_date());
+			System.out.println(item.toString());
 		}
 	}
 	
-	public static void saveList(TodoList l, String filename) {
-		try {
-			String filePath = Paths.get(".").toAbsolutePath().toString() +"/"+ filename;
-			BufferedWriter bw = new BufferedWriter(new FileWriter(filePath));
-			for(TodoItem item : l.getList()) {
-				bw.write(item.toSaveString());
-                bw.flush();
-			}
-            bw.close();
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+	public static void listAll(TodoList l, int is_completed) {
+		for (TodoItem item : l.getList(is_completed)) {
+			System.out.println(item.toString());
 		}
 	}
-	
-	public static void loadList(TodoList l, String filename) throws FileNotFoundException {
-		
-		try {
-			String filePath = Paths.get(".").toAbsolutePath().toString() +"/"+ filename;
-			File file = new File(filePath);
-			
-			if(file.exists()) {
-	            BufferedReader br = new BufferedReader(new FileReader(file));
 
-	            String line = "";
-	            while ((line = br.readLine()) != null) {
-	                StringTokenizer st = new StringTokenizer(line, "##");
-	                String category = st.nextToken().trim();
-	                String title = st.nextToken().trim();
-	                String desc = st.nextToken().trim();
-	                String due_date = st.nextToken().trim();
-	                String current_date = st.nextToken().trim();
-
-	                l.addItem(new TodoItem(title,desc,current_date,category,due_date));
-	            }
-	            System.out.println("파일 로딩 완료!");
-	            br.close();
-	        }
-	        else {
-	            System.out.println("파일 없음");
-	        }
-		} catch (IOException e) {
-			e.printStackTrace();
-		} catch (NoSuchElementException e){
-			e.printStackTrace();
-        } 
-	}
 	
 	public static void findKeyword (TodoList l, String keyword) {
 		int count = 0;
-//		int find_count = 0;
 		System.out.println("------검색 결과------");
 		for(TodoItem item : l.getList(keyword)) {
 			count ++;
-			System.out.println("[" + item.getCategory() + "] " + count + ". <"+ item.getTitle() + "> " + item.getDesc() + " (마감 : " + item.getDue_date() + ") - " + item.getCurrent_date());
+			System.out.println(item.toString());
 		}
 		System.out.println("총 "+count+"개의 일정을 찾았습니다.");
 	}
@@ -190,7 +155,7 @@ public class TodoUtil {
 		System.out.println("------검색 결과------");
 		for(TodoItem item : l.getListCategory(keyword)) {
 			count ++;
-			System.out.println("[" + item.getCategory() + "] " + count + ". <"+ item.getTitle() + "> " + item.getDesc() + " (마감 : " + item.getDue_date() + ") - " + item.getCurrent_date());
+			System.out.println(item.toString());
 		}
 		System.out.println("총 "+count+"개의 일정을 찾았습니다.");
 	}
@@ -203,4 +168,53 @@ public class TodoUtil {
 		}
 		System.out.println("총 "+count+"개의 카테고리가 등록되어 있습니다.");
 	}
+	
+//	public static void saveList(TodoList l, String filename) {
+//	try {
+//		String filePath = Paths.get(".").toAbsolutePath().toString() +"/"+ filename;
+//		BufferedWriter bw = new BufferedWriter(new FileWriter(filePath));
+//		for(TodoItem item : l.getList()) {
+//			bw.write(item.toSaveString());
+//            bw.flush();
+//		}
+//        bw.close();
+//	} catch (IOException e) {
+//		// TODO Auto-generated catch block
+//		e.printStackTrace();
+//	}
+//}
+
+//public static void loadList(TodoList l, String filename) throws FileNotFoundException {
+//	
+//	try {
+//		String filePath = Paths.get(".").toAbsolutePath().toString() +"/"+ filename;
+//		File file = new File(filePath);
+//		
+//		if(file.exists()) {
+//            BufferedReader br = new BufferedReader(new FileReader(file));
+//
+//            String line = "";
+//            while ((line = br.readLine()) != null) {
+//                StringTokenizer st = new StringTokenizer(line, "##");
+//                String category = st.nextToken().trim();
+//                String title = st.nextToken().trim();
+//                String desc = st.nextToken().trim();
+//                String due_date = st.nextToken().trim();
+//                String current_date = st.nextToken().trim();
+//                int is_completed = Integer.parseInt(st.nextToken().trim());
+//
+//                l.addItem(new TodoItem(title,desc,current_date,category,due_date,is_completed));
+//            }
+//            System.out.println("파일 로딩 완료!");
+//            br.close();
+//        }
+//        else {
+//            System.out.println("파일 없음");
+//        }
+//	} catch (IOException e) {
+//		e.printStackTrace();
+//	} catch (NoSuchElementException e){
+//		e.printStackTrace();
+//    } 
+//}
 }

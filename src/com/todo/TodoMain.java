@@ -2,7 +2,6 @@ package com.todo;
 
 import java.util.Scanner;
 
-
 import com.todo.dao.TodoList;
 import com.todo.menu.Menu;
 import com.todo.service.TodoUtil;
@@ -78,6 +77,17 @@ public class TodoMain {
 					keyword = sc.next().trim();
 					TodoUtil.findCateKeyword(l, keyword);
 					break;
+				
+				case "comp" :
+					keyword = sc.next().trim();
+					int id = Integer.parseInt(keyword);
+					TodoUtil.completeItem(l, id);
+					break;
+				
+				case "ls_comp" :
+					TodoUtil.listAll(l,1);
+					break;
+					
 
 				case "exit":
 					quit = true;
